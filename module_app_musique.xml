@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_app_musique" default="compile.module.app_musique">
+  <dirname property="module.app_musique.basedir" file="${ant.file.module_app_musique}"/>
+  
+  <property name="module.jdk.home.app_musique" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.app_musique" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.app_musique" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.app_musique" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="app_musique.output.dir" value="${module.app_musique.basedir}/out/production/App Musique"/>
+  <property name="app_musique.testoutput.dir" value="${module.app_musique.basedir}/out/test/App Musique"/>
+  
+  <path id="app_musique.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="app_musique.module.production.classpath">
+    <path refid="${module.jdk.classpath.app_musique}"/>
+  </path>
+  
+  <path id="app_musique.runtime.production.module.classpath">
+    <pathelement location="${app_musique.output.dir}"/>
+  </path>
+  
+  <path id="app_musique.module.classpath">
+    <path refid="${module.jdk.classpath.app_musique}"/>
+    <pathelement location="${app_musique.output.dir}"/>
+  </path>
+  
+  <path id="app_musique.runtime.module.classpath">
+    <pathelement location="${app_musique.testoutput.dir}"/>
+    <pathelement location="${app_musique.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.app_musique">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.app_musique">
+    <patternset refid="excluded.from.module.app_musique"/>
+  </patternset>
+  
+  <path id="app_musique.module.sourcepath">
+    <dirset dir="${module.app_musique.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.app_musique" depends="compile.module.app_musique.production,compile.module.app_musique.tests" description="Compile module App Musique"/>
+  
+  <target name="compile.module.app_musique.production" depends="register.custom.compilers" description="Compile module App Musique; production classes">
+    <mkdir dir="${app_musique.output.dir}"/>
+    <javac2 destdir="${app_musique.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.app_musique}/javac">
+      <compilerarg line="${compiler.args.app_musique}"/>
+      <bootclasspath refid="app_musique.module.bootclasspath"/>
+      <classpath refid="app_musique.module.production.classpath"/>
+      <src refid="app_musique.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.app_musique"/>
+    </javac2>
+    
+    <copy todir="${app_musique.output.dir}">
+      <fileset dir="${module.app_musique.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.app_musique.tests" depends="register.custom.compilers,compile.module.app_musique.production" description="compile module App Musique; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.app_musique" description="cleanup module">
+    <delete dir="${app_musique.output.dir}"/>
+    <delete dir="${app_musique.testoutput.dir}"/>
+  </target>
+</project>
